@@ -1,21 +1,25 @@
-# parser.py
+import csv
 
-from utils import ExecutableUtil
-
-
-class Parser(ExecutableUtil):
+class Parser:
     """
-    DOCUMENTME
+    Класс Parser предназначен для парсинга данных, загруженных из Google таблицы.
     """
-    def execute(self, *args):
-        """
-        DOCUMENTME
-        """
-        self.parse(*args)
-    
+
     def parse(self, data):
         """
-        DOCUMENTME
+        Метод парсит данные из строки CSV и возвращает список пар (почта, список слов).
+
+        :param data: str, содержимое таблицы в формате CSV
+        :return: list of tuples, где каждый элемент - это кортеж (почта, список слов)
         """
-        # TODO: ImplementMe
-        raise NotImplementedError('Implement parse in %s.' % (self.__class__.__name__))
+        parsed_data = []
+        reader = csv.DictReader(data.splitlines())
+
+        for row in reader:
+            mail = row.get('mail')
+            words = row.get('words')
+            if words:
+                words_list = [word.strip() for word in words.replace(';', ',').split(',')]
+                parsed_data.append((mail, words_list))
+
+        return parsed_data

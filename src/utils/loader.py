@@ -1,21 +1,19 @@
-# loader.py
+import requests
 
-from utils import ExecutableUtil
-
-
-class Loader(ExecutableUtil):
+class Loader:
     """
-    DOCUMENTME
+    Класс Loader предназначен для загрузки данных из Google таблицы.
     """
-    def execute(self, *args):
-        """
-        DOCUMENTME
-        """
-        self.load(*args)
-    
+
     def load(self, link):
         """
-        DOCUMENTME
+        Метод загружает данные из Google таблицы по указанной ссылке.
+
+        :param link: str, ссылка на Google таблицу
+        :return: str, содержимое таблицы в формате CSV
         """
-        # TODO: ImplementMe
-        raise NotImplementedError('Implement load in %s.' % (self.__class__.__name__))
+        response = requests.get(link)
+        if response.status_code == 200:
+            return response.text
+        else:
+            response.raise_for_status()
